@@ -29,7 +29,8 @@ find_package(OpenGL REQUIRED)
 set(QT_USE_QTOPENGL TRUE)
 set(QT_USE_QTXML TRUE)
 find_package(QGLViewer REQUIRED)
-find_package(Eigen REQUIRED)
+# find_package(Eigen REQUIRED)
+set(EIGEN_INCLUDE_DIR "/usr/include/eigen3")
 find_package(OpenCV REQUIRED)
 find_package(Boost REQUIRED COMPONENTS thread)
 
@@ -43,7 +44,7 @@ set(CMAKE_CXX_FLAGS
    "${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x"
 )
 
-add_message_files(DIRECTORY msg FILES keyframeMsg.msg keyframeGraphMsg.msg)
+add_message_files( DIRECTORY msg FILES keyframeMsg.msg keyframeGraphMsg.msg)
 generate_messages(DEPENDENCIES)
 
 generate_dynamic_reconfigure_options(
