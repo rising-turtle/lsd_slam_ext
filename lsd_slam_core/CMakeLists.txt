@@ -20,17 +20,19 @@ find_package(catkin REQUIRED COMPONENTS
   rosbag
 )
 
-find_package(Eigen REQUIRED)
+# find_package(Eigen REQUIRED)
 find_package(X11 REQUIRED)
 include(cmake/FindG2O.cmake)
 include(cmake/FindSuiteParse.cmake)
 
 message("-- CHOLMOD_INCLUDE_DIR : " ${CHOLMOD_INCLUDE_DIR})
 message("-- CSPARSE_INCLUDE_DIR : " ${CSPARSE_INCLUDE_DIR})
-message("-- G2O_INCLUDE_DIR : " ${G2O_INCLUDE_DIR})
+message("++++++++++++++++++++++= G2O_INCLUDE_DIR : " ${G2O_INCLUDE_DIR})
+message("++++++++++++++++++++++ G2O_LIBRARIES: ${G2O_LIBRARIES}")
 
-include_directories(${G2O_INCLUDE_DIR})
-link_directories("${G2O_ROOT}/lib")
+include_directories("/usr/include/eigen3")
+include_directories(${G2O_INCLUDE_DIR} "${G2O_ROOT}/build/g2o" "/home/etas/hxzhang/3rdlibs/g2o/build")
+link_directories("${G2O_ROOT}/lib" "/home/etas/hxzhang/3rdlibs/g2o/lib")
 include_directories("${G2O_INCLUDE_DIR}/install/include")
 
 # FabMap
@@ -47,7 +49,8 @@ generate_dynamic_reconfigure_options(
 
 catkin_package(
   LIBRARIES lsdslam
-  DEPENDS Eigen SuiteSparse
+  #  DEPENDS Eigen SuiteSparse
+  DEPENDS SuiteSparse
   CATKIN_DEPENDS libg2o 
 )
 
@@ -110,6 +113,7 @@ include_directories(
   ${CHOLMOD_INCLUDE_DIR} #Has been set by SuiteParse
 )
 
+set(G2O_LIBS g2o_solver_csparse g2o_csparse_extension ${G2O_LIBRARIES})
 
 # build shared library.
 add_library(lsdslam SHARED ${SOURCE_FILES})
@@ -118,13 +122,13 @@ target_link_libraries(lsdslam ${FABMAP_LIB} ${G2O_LIBRARIES} ${catkin_LIBRARIES}
 
 
 # build live ros node
-add_executable(live_slam src/main_live_odometry.cpp)
-target_link_libraries(live_slam lsdslam ${catkin_LIBRARIES} ${G2O_LIBRARIES})
+# add_executable(live_slam src/main_live_odometry.cpp)
+# target_link_libraries(live_slam ${catkin_LIBRARIES} ${G2O_LIBS} lsdslam)
 
 
 # build image node
-add_executable(dataset src/main_on_images.cpp)
-target_link_libraries(dataset lsdslam ${catkin_LIBRARIES} ${G2O_LIBRARIES})
+# add_executable(dataset src/main_on_images.cpp)
+# target_link_libraries(dataset ${catkin_LIBRARIES} ${G2O_LIBS} lsdslam)
 
 # TODO add INSTALL
 
