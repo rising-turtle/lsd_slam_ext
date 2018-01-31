@@ -25,6 +25,18 @@ find_package(catkin REQUIRED COMPONENTS
   roslib
 )
 
+# SSE flags
+set(CMAKE_CXX_FLAGS
+   "${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x"
+)
+
+add_message_files( DIRECTORY msg FILES keyframeMsg.msg keyframeGraphMsg.msg)
+generate_messages(DEPENDENCIES)
+
+generate_dynamic_reconfigure_options(
+  cfg/LSDSLAMViewerParams.cfg
+)
+
 find_package(OpenGL REQUIRED)
 set(QT_USE_QTOPENGL TRUE)
 set(QT_USE_QTXML TRUE)
@@ -38,18 +50,6 @@ include_directories(${QGLVIEWER_INCLUDE_DIR}
 		    ${catkin_INCLUDE_DIRS} 
 		    ${EIGEN_INCLUDE_DIR}
 		    ${QT_INCLUDES} )
-
-# SSE flags
-set(CMAKE_CXX_FLAGS
-   "${CMAKE_CXX_FLAGS} -march=native -Wall -std=c++0x"
-)
-
-add_message_files( DIRECTORY msg FILES keyframeMsg.msg keyframeGraphMsg.msg)
-generate_messages(DEPENDENCIES)
-
-generate_dynamic_reconfigure_options(
-  cfg/LSDSLAMViewerParams.cfg
-)
 
 
 # Sources files
